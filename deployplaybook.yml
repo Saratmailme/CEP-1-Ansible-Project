@@ -1,0 +1,21 @@
+---
+- hosts: webserver
+  become: root
+  tasks:
+  - name: clone the git module
+    git: repo=https://github.com/Sonal0409/DevOpsCodeDemo.git dest=/tmp/devopscode-repo
+  - name: maven build the code
+    command:
+      argv:
+       - chdir: /tmp/devopscode-repo
+       - mvn package
+  - name: copy address.war from targetfile
+    copy: src=/tmp/devopscode-repo/target/addressbook.war dest=/tmp/devopscode-repo remote_src=yes
+  - name: build the docker 
+    command: 
+      argv:
+       - chdir: /tmp/devopscode-repo
+       - docker build -t myimage:ansible .
+  - name: run the image 
+    command: docker run -d -P myimage:ansible
+... 

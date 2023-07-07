@@ -1,0 +1,19 @@
+---
+- hosts: webserver
+  become: root
+  tasks:
+  - name: update command
+    command: apt-get update
+  - name: install maven
+    package:
+     name: maven
+     state: present
+  - name: install docker
+    package:
+     name: docker-ce
+     state: present
+  - name: restart docker service
+    service:
+     name: docker
+     state: started
+...
